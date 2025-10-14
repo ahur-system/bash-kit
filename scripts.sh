@@ -4,7 +4,7 @@ set -euo pipefail
 REPO="https://github.com/ahur-system/bash-kit"
 INSTALL_DIR="/usr/local/bash-kit"
 BIN_DIR="/usr/local/bin"
-TOOLS_URL="$REPO/raw/master/tools"
+TOOLS_URL="$REPO/raw/main/tools"
 TOOLS_API_URL="https://api.github.com/repos/ahur-system/bash-kit/contents/tools"
 
 usage() {
@@ -20,6 +20,7 @@ EOF
 
 list_tools() {
   echo "[*] Fetching available tools from GitHub..."
+  echo "[DEBUG] API URL: $TOOLS_API_URL"
   curl -sL "$TOOLS_API_URL" \
     | grep '"type": "dir"' -B2 | grep '"name":' | cut -d'"' -f4 | sort
 }
@@ -33,6 +34,7 @@ install_tool() {
   mkdir -p "$tool_dir"
 
   echo "[+] Installing tool: $tool"
+  echo "[DEBUG] Tool URL: $TOOLS_URL/$tool/$tool.sh"
 
   # Install main script
   if ! curl -fsSL "$TOOLS_URL/$tool/$tool.sh" -o "$main_script"; then
@@ -48,6 +50,7 @@ install_tool() {
   local files_installed=0
 
   # Try to install systemd service
+  echo "[DEBUG] systemd service URL: $TOOLS_URL/$tool/systemd/$tool.service"
   if curl -fsSL "$TOOLS_URL/$tool/systemd/$tool.service" -o "$tool_dir/$tool.service" 2>/dev/null; then
     echo "  ✓ systemd service downloaded: $tool_dir/$tool.service"
 
@@ -62,6 +65,7 @@ install_tool() {
   fi
 
   # Try to install tool README
+  echo "[DEBUG] README URL: $TOOLS_URL/$tool/README.md"
   if curl -fsSL "$TOOLS_URL/$tool/README.md" -o "$tool_dir/README.md" 2>/dev/null; then
     echo "  ✓ Documentation: $tool_dir/README.md"
     files_installed=1
