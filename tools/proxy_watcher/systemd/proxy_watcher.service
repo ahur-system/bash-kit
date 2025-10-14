@@ -1,29 +1,15 @@
 [Unit]
 Description=bash-kit proxy watcher service
-Documentation=https://github.com/alikhaleghi/bash-kit
-After=network-online.target
-Wants=network-online.target
-StartLimitIntervalSec=0
+After=network.target
+Wants=network.target
 
 [Service]
 Type=simple
 Restart=always
 RestartSec=10
-
-ExecStartPre=/bin/mkdir -p /var/lib/proxy_watcher
 ExecStart=/usr/local/bin/proxy_watcher
-Environment=HOME=/var/lib/proxy_watcher
-WorkingDirectory=/var/lib/proxy_watcher
 StandardOutput=journal
 StandardError=journal
-SyslogIdentifier=proxy_watcher
-
-# Security settings
-NoNewPrivileges=true
-
-# Resource limits
-MemoryMax=256M
-TasksMax=50
 
 [Install]
 WantedBy=multi-user.target
