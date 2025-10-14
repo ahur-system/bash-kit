@@ -15,7 +15,7 @@ Continuously fetches and maintains a list of working free proxies.
 ## Installation
 
 ```bash
-curl -sL https://github.com/ahur-system/bash-kit/raw/main/scripts.sh | sudo bash -s @ install proxy_watcher
+curl -sL https://github.com/ahur-system/bash-kit/raw/main/bkit.sh | sudo bash -s @ install proxy_watcher
 ```
 
 ## Usage
@@ -33,7 +33,7 @@ nohup proxy_watcher >/tmp/proxy_watcher.log 2>&1 &
 ### systemd Service (Automatic)
 ```bash
 # Installation automatically installs and starts the systemd service
-curl -sL https://github.com/ahur-system/bash-kit/raw/main/scripts.sh | sudo bash -s @ install proxy_watcher
+curl -sL https://github.com/ahur-system/bash-kit/raw/main/bkit.sh | sudo bash -s @ install proxy_watcher
 
 # Check status
 sudo systemctl status proxy_watcher
@@ -47,7 +47,7 @@ sudo systemctl restart proxy_watcher
 ## Uninstallation
 ```bash
 # Completely removes tool and systemd service
-curl -sL https://github.com/ahur-system/bash-kit/raw/main/scripts.sh | sudo bash -s @ uninstall proxy_watcher
+curl -sL https://github.com/ahur-system/bash-kit/raw/main/bkit.sh | sudo bash -s @ uninstall proxy_watcher
 ```
 
 ## Configuration

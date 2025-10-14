@@ -7,7 +7,7 @@
 ## 🚀 Quick Install
 
 ```bash
-curl -sL https://github.com/ahur-system/bash-kit/raw/main/scripts.sh | sudo bash -s @ install
+curl -sL https://github.com/ahur-system/bash-kit/raw/main/bkit.sh | sudo bash -s @ install
 ```
 
 This will list available tools.
@@ -15,7 +15,7 @@ This will list available tools.
 Or install directly:
 
 ```bash
-curl -sL https://github.com/ahur-system/bash-kit/raw/main/scripts.sh | sudo bash -s @ install proxy_watcher
+curl -sL https://github.com/ahur-system/bash-kit/raw/main/bkit.sh | sudo bash -s @ install proxy_watcher
 ```
 
 ## 🔧 Available Tools
@@ -28,13 +28,18 @@ curl -sL https://github.com/ahur-system/bash-kit/raw/main/scripts.sh | sudo bash
 
 ```bash
 # List all available tools
-curl -sL https://github.com/ahur-system/bash-kit/raw/main/scripts.sh | sudo bash -s @ list
+curl -sL https://github.com/ahur-system/bash-kit/raw/main/bkit.sh | sudo bash -s @ list
 
-# Install multiple tools at once (each auto-starts systemd service if available)
-curl -sL https://github.com/ahur-system/bash-kit/raw/main/scripts.sh | sudo bash -s @ install proxy_watcher backup_mysql
+# Install bkit locally for easier use
+sudo bash -c "$(curl -sL https://github.com/ahur-system/bash-kit/raw/main/bkit.sh)" @ install bkit
 
-# Uninstall a tool (stops/removes systemd service automatically)
-curl -sL https://github.com/ahur-system/bash-kit/raw/main/scripts.sh | sudo bash -s @ uninstall proxy_watcher
+# Then use locally:
+bkit list
+bkit install proxy_watcher
+bkit uninstall proxy_watcher
+
+# Or use directly without installing:
+curl -sL https://github.com/ahur-system/bash-kit/raw/main/bkit.sh | sudo bash -s @ install proxy_watcher
 
 # Check running service
 sudo systemctl status proxy_watcher
@@ -44,7 +49,7 @@ sudo systemctl status proxy_watcher
 
 ```
 bash-kit/
-├── scripts.sh           # Universal installer/manager
+├── bkit.sh              # Universal installer/manager
 └── tools/
     └── proxy_watcher/
         ├── proxy_watcher.sh      # Main script
@@ -79,7 +84,11 @@ Fetches multiple free proxy lists periodically, tests them, and maintains a `hea
 **Usage:**
 ```bash
 # Install and auto-start as systemd service
-curl -sL https://github.com/ahur-system/bash-kit/raw/main/scripts.sh | sudo bash -s @ install proxy_watcher
+curl -sL https://github.com/ahur-system/bash-kit/raw/main/bkit.sh | sudo bash -s @ install proxy_watcher
+
+# Or install bkit locally first:
+sudo bash -c "$(curl -sL https://github.com/ahur-system/bash-kit/raw/main/bkit.sh)" @ install bkit
+bkit install proxy_watcher
 
 # Check service status
 sudo systemctl status proxy_watcher

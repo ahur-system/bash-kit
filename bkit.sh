@@ -6,15 +6,24 @@ INSTALL_DIR="/usr/local/bash-kit"
 BIN_DIR="/usr/local/bin"
 TOOLS_URL="$REPO/raw/main/tools"
 TOOLS_API_URL="https://api.github.com/repos/ahur-system/bash-kit/contents/tools"
+BKIT_URL="$REPO/raw/main/bkit.sh"
 
 usage() {
   cat <<EOF
 bash-kit installer
 
 Usage:
-  curl -sL $REPO/raw/main/scripts.sh | sudo bash -s @ install [tool1] [tool2] ...
-  curl -sL $REPO/raw/main/scripts.sh | sudo bash -s @ list
-  curl -sL $REPO/raw/main/scripts.sh | sudo bash -s @ uninstall [tool]
+  curl -sL $REPO/raw/main/bkit.sh | sudo bash -s @ install [tool1] [tool2] ...
+  curl -sL $REPO/raw/main/bkit.sh | sudo bash -s @ list
+  curl -sL $REPO/raw/main/bkit.sh | sudo bash -s @ uninstall [tool]
+
+  # Install bkit locally for easier use:
+  sudo bash -c "\$(curl -sL $REPO/raw/main/bkit.sh)" @ install bkit
+
+  # Then use locally:
+  bkit list
+  bkit install proxy_watcher
+  bkit uninstall proxy_watcher
 EOF
 }
 
@@ -26,6 +35,25 @@ list_tools() {
 
 install_tool() {
   local tool="$1"
+
+  # Special case: installing bkit itself
+  if [ "$tool" = "bkit" ]; then
+    echo "[+] Installing bkit locally..."
+    mkdir -p "$INSTALL_DIR"
+
+    if curl -fsSL "$BKIT_URL" -o "$INSTALL_DIR/bkit.sh"; then
+      chmod +x "$INSTALL_DIR/bkit.sh"
+      ln -sf "$INSTALL_DIR/bkit.sh" "$BIN_DIR/bkit"
+      echo "  ✓ bkit installed: $BIN_DIR/bkit"
+      echo "  → Now you can use: bkit list, bkit install <tool>, etc."
+      return
+    else
+      echo "  ✗ Failed to download bkit installer"
+      exit 1
+    fi
+  fi
+
+  # Regular tool installation
   local tool_dir="$INSTALL_DIR/tools/$tool"
   local main_script="$tool_dir/$tool.sh"
   local service_name="$tool"
@@ -85,9 +113,19 @@ install_tool() {
 
 uninstall_tool() {
   local tool="$1"
-  local service_name="$tool"
 
   echo "[-] Uninstalling $tool..."
+
+  # Special case: uninstalling bkit itself
+  if [ "$tool" = "bkit" ]; then
+    rm -f "$INSTALL_DIR/bkit.sh"
+    rm -f "$BIN_DIR/bkit"
+    echo "  ✓ bkit removed"
+    return
+  fi
+
+  # Regular tool uninstallation
+  local service_name="$tool"
 
   # Remove systemd service if it exists
   if [ -f "/etc/systemd/system/$service_name.service" ]; then
@@ -105,33 +143,45 @@ uninstall_tool() {
   echo "  ✓ Tool files removed."
 }
 
-case "${1:-}" in
-  @)
-    shift
-    case "${1:-}" in
-      install)
-        shift
-        if [ $# -eq 0 ]; then
-          echo "Available tools:"
-          list_tools
-          echo ""
-          echo "Install one with:"
-          echo "  curl -sL $REPO/raw/main/scripts.sh | sudo bash -s @ install <tool>"
-        else
-          mkdir -p "$INSTALL_DIR/tools"
-          for tool in "$@"; do install_tool "$tool"; done
-        fi
-        ;;
-      list)
-        list_tools
-        ;;
-      uninstall)
-        shift
-        for tool in "$@"; do uninstall_tool "$tool"; done
-        ;;
-      *)
-        usage ;;
-    esac
+# Handle different invocation methods
+if [ "${1:-}" = "@" ]; then
+  # Called with @ (curl | bash -s @ command)
+  shift
+  COMMAND="${1:-}"
+elif [ $# -gt 0 ]; then
+  # Called directly (bkit command)
+  COMMAND="${1:-}"
+else
+  # No arguments
+  COMMAND=""
+fi
+
+case "$COMMAND" in
+  install)
+    shift 2>/dev/null || shift
+    if [ $# -eq 0 ]; then
+      echo "Available tools:"
+      list_tools
+      echo ""
+      echo "Install one with:"
+      echo "  curl -sL $REPO/raw/main/bkit.sh | sudo bash -s @ install <tool>"
+      echo "Or install bkit locally:"
+      echo "  sudo bash -c \"\$(curl -sL $REPO/raw/main/bkit.sh)\" @ install bkit"
+    else
+      mkdir -p "$INSTALL_DIR/tools"
+      for tool in "$@"; do install_tool "$tool"; done
+    fi
+    ;;
+  list)
+    list_tools
+    ;;
+  uninstall)
+    shift 2>/dev/null || shift
+    if [ $# -eq 0 ]; then
+      echo "Usage: uninstall <tool>"
+      exit 1
+    fi
+    for tool in "$@"; do uninstall_tool "$tool"; done
     ;;
   *)
     usage ;;
