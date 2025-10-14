@@ -20,7 +20,6 @@ EOF
 
 list_tools() {
   echo "[*] Fetching available tools from GitHub..."
-  echo "[DEBUG] API URL: $TOOLS_API_URL"
   curl -sL "$TOOLS_API_URL" \
     | grep '"type": "dir"' -B2 | grep '"name":' | cut -d'"' -f4 | sort
 }
@@ -34,7 +33,6 @@ install_tool() {
   mkdir -p "$tool_dir"
 
   echo "[+] Installing tool: $tool"
-  echo "[DEBUG] Tool URL: $TOOLS_URL/$tool/$tool.sh"
 
   # Install main script
   if ! curl -fsSL "$TOOLS_URL/$tool/$tool.sh" -o "$main_script"; then
@@ -50,7 +48,6 @@ install_tool() {
   local files_installed=0
 
   # Try to install systemd service
-  echo "[DEBUG] systemd service URL: $TOOLS_URL/$tool/systemd/$tool.service"
   if curl -fsSL "$TOOLS_URL/$tool/systemd/$tool.service" -o "$tool_dir/$tool.service" 2>/dev/null; then
     echo "  ✓ systemd service downloaded: $tool_dir/$tool.service"
 
@@ -58,14 +55,20 @@ install_tool() {
     cp "$tool_dir/$tool.service" "/etc/systemd/system/$service_name.service"
     systemctl daemon-reload
     systemctl enable "$service_name.service"
-    systemctl start "$service_name.service"
+    systemctl start --no-block "$service_name.service"
 
-    echo "  ✓ systemd service installed and started: $service_name.service"
+    # Wait a moment and check if service started properly
+    sleep 2
+    if systemctl is-active --quiet "$service_name.service"; then
+      echo "  ✓ systemd service installed and started: $service_name.service"
+    else
+      echo "  ! systemd service installed but may have issues starting: $service_name.service"
+      echo "    Check with: sudo systemctl status $service_name"
+    fi
     files_installed=1
   fi
 
   # Try to install tool README
-  echo "[DEBUG] README URL: $TOOLS_URL/$tool/README.md"
   if curl -fsSL "$TOOLS_URL/$tool/README.md" -o "$tool_dir/README.md" 2>/dev/null; then
     echo "  ✓ Documentation: $tool_dir/README.md"
     files_installed=1
