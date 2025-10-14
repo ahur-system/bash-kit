@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-REPO="https://github.com/alikhaleghi/bash-kit"
+REPO="https://github.com/ahur-system/bash-kit"
 INSTALL_DIR="/usr/local/bash-kit"
 BIN_DIR="/usr/local/bin"
 TOOLS_URL="$REPO/raw/master/tools"
-TOOLS_API_URL="https://api.github.com/repos/alikhaleghi/bash-kit/contents/tools"
+TOOLS_API_URL="https://api.github.com/repos/ahur-system/bash-kit/contents/tools"
 
 usage() {
   cat <<EOF
@@ -105,7 +105,7 @@ case "${1:-}" in
           list_tools
           echo ""
           echo "Install one with:"
-          echo "  sudo bash -c \"\$(curl -sL $REPO/raw/master/scripts.sh)\" @ install <tool>"
+          echo "  sudo bash -c \"\$(curl -sL $REPO/raw/main/scripts.sh)\" @ install <tool>"
         else
           mkdir -p "$INSTALL_DIR/tools"
           for tool in "$@"; do install_tool "$tool"; done

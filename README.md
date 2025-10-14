@@ -7,7 +7,7 @@
 ## 🚀 Quick Install
 
 ```bash
-sudo bash -c "$(curl -sL https://github.com/alikhaleghi/bash-kit/raw/master/scripts.sh)" @ install
+sudo bash -c "$(curl -sL https://github.com/ahur-system/bash-kit/raw/main/scripts.sh)" @ install
 ```
 
 This will list available tools.
@@ -15,7 +15,7 @@ This will list available tools.
 Or install directly:
 
 ```bash
-sudo bash -c "$(curl -sL https://github.com/alikhaleghi/bash-kit/raw/master/scripts.sh)" @ install proxy_watcher
+sudo bash -c "$(curl -sL https://github.com/ahur-system/bash-kit/raw/main/scripts.sh)" @ install proxy_watcher
 ```
 
 ## 🔧 Available Tools
@@ -28,13 +28,13 @@ sudo bash -c "$(curl -sL https://github.com/alikhaleghi/bash-kit/raw/master/scri
 
 ```bash
 # List all available tools
-sudo bash -c "$(curl -sL https://github.com/alikhaleghi/bash-kit/raw/master/scripts.sh)" @ list
+sudo bash -c "$(curl -sL https://github.com/ahur-system/bash-kit/raw/main/scripts.sh)" @ list
 
 # Install multiple tools at once (each auto-starts systemd service if available)
-sudo bash -c "$(curl -sL https://github.com/alikhaleghi/bash-kit/raw/master/scripts.sh)" @ install proxy_watcher backup_mysql
+sudo bash -c "$(curl -sL https://github.com/ahur-system/bash-kit/raw/main/scripts.sh)" @ install proxy_watcher backup_mysql
 
 # Uninstall a tool (stops/removes systemd service automatically)
-sudo bash -c "$(curl -sL https://github.com/alikhaleghi/bash-kit/raw/master/scripts.sh)" @ uninstall proxy_watcher
+sudo bash -c "$(curl -sL https://github.com/ahur-system/bash-kit/raw/main/scripts.sh)" @ uninstall proxy_watcher
 
 # Check running service
 sudo systemctl status proxy_watcher
@@ -77,7 +77,7 @@ Fetches multiple free proxy lists periodically, tests them, and maintains a `hea
 **Usage:**
 ```bash
 # Install and auto-start as systemd service
-sudo bash -c "$(curl -sL https://github.com/alikhaleghi/bash-kit/raw/master/scripts.sh)" @ install proxy_watcher
+sudo bash -c "$(curl -sL https://github.com/ahur-system/bash-kit/raw/main/scripts.sh)" @ install proxy_watcher
 
 # Check service status
 sudo systemctl status proxy_watcher
