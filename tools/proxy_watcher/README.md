@@ -20,9 +20,21 @@ curl -sL https://github.com/ahur-system/bash-kit/raw/main/bkit.sh | sudo bash -s
 
 ## Usage
 
-### Manual Run
+### Continuous Monitoring (Default)
 ```bash
 proxy_watcher
+```
+
+### List Proxies
+```bash
+# List all working proxies
+proxy_watcher healthy
+
+# List all failed proxies with timestamps
+proxy_watcher bad
+
+# List all discovered proxies
+proxy_watcher all
 ```
 
 ### Background Run
@@ -70,6 +82,25 @@ Edit the script to modify these settings:
 - **`bad.txt`** - Failed proxies with timestamps
 - **`all.txt`** - Latest raw proxy list from all sources
 
+### Viewing Data Files
+Instead of manually accessing files, use the built-in listing commands:
+```bash
+# View working proxies
+proxy_watcher healthy
+
+# View failed proxies with failure times
+proxy_watcher bad  
+
+# View all discovered proxies
+proxy_watcher all
+```
+
+**Manual file access:**
+```bash
+sudo ls -la /usr/local/bash-kit/tools/proxy_watcher/data/
+sudo cat /usr/local/bash-kit/tools/proxy_watcher/data/healthy.txt
+```
+
 ## Proxy Sources
 
 Currently fetches from:
@@ -86,6 +117,7 @@ Currently fetches from:
 
 ## Output Format
 
+### Continuous Monitoring Mode
 ```
 [+] Fetching fresh proxy lists...
 [+] Got 1247 unique proxies.
@@ -95,4 +127,26 @@ Currently fetches from:
 [+] Health list updated: 23 working proxies.
 [*] Random recheck of existing healthy proxies...
 [*] Sleeping 60s...
+```
+
+### Listing Commands
+```bash
+$ proxy_watcher healthy
+[+] Working proxies (23):
+192.168.1.1:8080
+203.0.113.5:3128
+...
+
+$ proxy_watcher bad
+[+] Failed proxies with timestamps (145):
+2024-01-15 14:23:45 10.0.0.1:3128
+2024-01-15 14:25:12 192.0.2.1:8080
+...
+
+$ proxy_watcher all
+[+] All discovered proxies (1247):
+192.168.1.1:8080
+10.0.0.1:3128
+203.0.113.5:3128
+...
 ```

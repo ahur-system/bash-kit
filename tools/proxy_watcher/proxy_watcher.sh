@@ -22,9 +22,58 @@ SOURCES=(
 )
 # --- END CONFIG ---
 
-mkdir -p "$WORKDIR"
-cd "$WORKDIR" || exit 1
-touch healthy.txt bad.txt all.txt
+
+
+# --- ARGUMENT HANDLING ---
+show_usage() {
+  echo "Usage: proxy_watcher [healthy|bad|all]"
+  echo
+  echo "Commands:"
+  echo "  healthy    List all working proxies"
+  echo "  bad        List all failed proxies with timestamps"
+  echo "  all        List all discovered proxies"
+  echo "  (no args)  Run continuous proxy monitoring (default)"
+  echo
+  echo "Data directory: $WORKDIR"
+}
+
+list_proxies() {
+  local type="$1"
+  # Ensure data directory exists
+  mkdir -p "$WORKDIR"
+  cd "$WORKDIR" || exit 1
+  case "$type" in
+    healthy)
+      if [ -f healthy.txt ] && [ -s healthy.txt ]; then
+        echo "[+] Working proxies ($(wc -l < healthy.txt)):"
+        cat healthy.txt
+      else
+        echo "[-] No healthy proxies found. Run proxy_watcher to start monitoring."
+      fi
+      ;;
+    bad)
+      if [ -f bad.txt ] && [ -s bad.txt ]; then
+        echo "[+] Failed proxies with timestamps ($(wc -l < bad.txt)):"
+        cat bad.txt
+      else
+        echo "[-] No bad proxies logged yet."
+      fi
+      ;;
+    all)
+      if [ -f all.txt ] && [ -s all.txt ]; then
+        echo "[+] All discovered proxies ($(wc -l < all.txt)):"
+        cat all.txt
+      else
+        echo "[-] No proxy list found. Run proxy_watcher to fetch proxies."
+      fi
+      ;;
+    *)
+      echo "Error: Invalid argument '$type'"
+      show_usage
+      exit 1
+      ;;
+  esac
+}
 
 fetch_proxies() {
   echo "[+] Fetching fresh proxy lists..."
@@ -89,5 +138,34 @@ main_loop() {
     sleep "$CHECK_INTERVAL_SEC"
   done
 }
+
+# Handle command line arguments
+if [ $# -eq 1 ]; then
+  case "$1" in
+    healthy|bad|all)
+      list_proxies "$1"
+      exit 0
+      ;;
+    -h|--help|help)
+      show_usage
+      exit 0
+      ;;
+    *)
+      echo "Error: Unknown argument '$1'"
+      show_usage
+      exit 1
+      ;;
+  esac
+elif [ $# -gt 1 ]; then
+  echo "Error: Too many arguments"
+  show_usage
+  exit 1
+fi
+
+# No arguments - run main loop
+# Ensure data directory exists and initialize files
+mkdir -p "$WORKDIR"
+cd "$WORKDIR" || exit 1
+touch healthy.txt bad.txt all.txt
 
 main_loop
