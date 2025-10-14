@@ -23,6 +23,7 @@ curl -sL https://github.com/ahur-system/bash-kit/raw/main/bkit.sh | sudo bash -s
 | Tool | Description |
 |------|-------------|
 | **proxy_watcher** | Continuously fetches and maintains a list of working free proxies |
+| **dirstat** | Analyzes directory and filesystem usage with optional recursive tree view |
 
 ## 🧩 Usage Examples
 
@@ -51,12 +52,15 @@ sudo systemctl status proxy_watcher
 bash-kit/
 ├── bkit.sh              # Universal installer/manager
 └── tools/
-    └── proxy_watcher/
-        ├── proxy_watcher.sh      # Main script
-        ├── README.md             # Tool documentation
-        └── systemd/
-            ├── proxy-watcher.service
-            └── README.md
+    ├── proxy_watcher/
+    │   ├── proxy_watcher.sh      # Main script
+    │   ├── README.md             # Tool documentation
+    │   └── systemd/
+    │       ├── proxy-watcher.service
+    │       └── README.md
+    └── dirstat/
+        ├── dirstat.sh            # Main script
+        └── README.md             # Tool documentation
 ```
 
 ## 🛠️ Tool Details
@@ -94,6 +98,37 @@ sudo systemctl status proxy_watcher
 
 # Manual run (if needed)
 nohup proxy_watcher >/tmp/proxy_watcher.log 2>&1 &
+```
+
+### dirstat
+
+Analyzes directory and filesystem usage with optional recursive tree view for quick disk space analysis.
+
+**Features:**
+- Shows filesystem total, used, and available space
+- Calculates directory usage as percentage of filesystem
+- Recursive tree view of subdirectories sorted by size
+- Human-readable size formatting (B/K/M/G/T)
+- Handles paths with spaces gracefully
+- Uses only standard Linux utilities
+- Visual tree structure with emojis
+
+**Usage:**
+```bash
+# Install dirstat
+curl -sL https://github.com/ahur-system/bash-kit/raw/main/bkit.sh | sudo bash -s @ install dirstat
+
+# Basic directory analysis
+dirstat /home
+
+# Recursive tree view
+dirstat -r /var/log
+
+# Current directory
+dirstat
+
+# Show help
+dirstat --help
 ```
 
 ## 🪄 Philosophy
