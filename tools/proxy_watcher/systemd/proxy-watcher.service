@@ -21,7 +21,7 @@ NoNewPrivileges=true
 PrivateTmp=true
 ProtectSystem=strict
 ProtectHome=true
-ReadWritePaths=/home/nobody
+ReadWritePaths=/home/nobody/proxy_watcher
 
 # Resource limits
 MemoryMax=256M

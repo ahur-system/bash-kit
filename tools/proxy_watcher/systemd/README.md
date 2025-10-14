@@ -4,21 +4,21 @@ This directory contains the systemd service file to run `proxy_watcher` as a sys
 
 ## Installation
 
-1. **Install the proxy_watcher tool first:**
+1. **Install the proxy_watcher tool:**
    ```bash
    sudo bash -c "$(curl -sL https://github.com/alikhaleghi/bash-kit/raw/master/scripts.sh)" @ install proxy_watcher
    ```
+   This automatically downloads the tool and systemd service file.
 
 2. **Install the systemd service:**
    ```bash
-   sudo cp proxy-watcher.service /etc/systemd/system/
+   sudo cp /usr/local/bash-kit/tools/proxy_watcher/proxy-watcher.service /etc/systemd/system/
    sudo systemctl daemon-reload
    ```
 
 3. **Enable and start the service:**
    ```bash
-   sudo systemctl enable proxy-watcher
-   sudo systemctl start proxy-watcher
+   sudo systemctl enable --now proxy-watcher
    ```
 
 ## Management Commands
@@ -39,11 +39,14 @@ sudo systemctl restart proxy-watcher
 # Disable service (won't start on boot)
 sudo systemctl disable proxy-watcher
 
-# Remove service
+# Remove service completely
 sudo systemctl stop proxy-watcher
 sudo systemctl disable proxy-watcher
 sudo rm /etc/systemd/system/proxy-watcher.service
 sudo systemctl daemon-reload
+
+# Uninstall the tool entirely
+sudo bash -c "$(curl -sL https://github.com/alikhaleghi/bash-kit/raw/master/scripts.sh)" @ uninstall proxy_watcher
 ```
 
 ## Service Details

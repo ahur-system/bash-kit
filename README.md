@@ -46,9 +46,12 @@ proxy_watcher
 bash-kit/
 ├── scripts.sh           # Universal installer/manager
 └── tools/
-    ├── proxy_watcher.sh
-    ├── backup_mysql.sh
-    └── sysmedic_agent.sh
+    └── proxy_watcher/
+        ├── proxy_watcher.sh      # Main script
+        ├── README.md             # Tool documentation
+        └── systemd/
+            ├── proxy-watcher.service
+            └── README.md
 ```
 
 ## 🛠️ Tool Details
@@ -89,10 +92,12 @@ nohup proxy_watcher >/tmp/proxy_watcher.log 2>&1 &
 - Standard GNU utilities (awk, grep, sort, etc.)
 
 ## 🗂️ Installation Location
+**Installation Location**
 
 Tools are installed to:
-- **Scripts:** `/usr/local/bash-kit/tools/`
-- **Symlinks:** `/usr/local/bin/` (added to PATH)
+- **Tool files:** `/usr/local/bash-kit/tools/<tool>/`
+- **Executables:** `/usr/local/bin/<tool>` (symlinked)
+- **Additional files:** systemd services, documentation, etc.
 
 ---
 
