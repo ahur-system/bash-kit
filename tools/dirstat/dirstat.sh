@@ -134,17 +134,25 @@ show_recursive_tree() {
 
   echo "📂 $resolved_path"
 
-  # Get subdirectories with sizes, sort by size (largest first)
+  # Get files and directories with sizes, sort by size (largest first)
   local temp_file
   temp_file=$(mktemp)
 
-  # Find direct subdirectories and get their sizes
-  find "$resolved_path" -mindepth 1 -maxdepth 1 -type d -print0 2>/dev/null | \
-  while IFS= read -r -d '' subdir; do
-    if [ -r "$subdir" ]; then
-      size_bytes=$(get_dir_size_bytes "$subdir")
-      basename_dir=$(basename "$subdir")
-      echo "$size_bytes|$basename_dir"
+  # Find direct files and directories and get their sizes
+  find "$resolved_path" -mindepth 1 -maxdepth 1 -print0 2>/dev/null | \
+  while IFS= read -r -d '' item; do
+    if [ -r "$item" ]; then
+      if [ -d "$item" ]; then
+        # Directory: use recursive size calculation
+        size_bytes=$(get_dir_size_bytes "$item")
+        basename_item=$(basename "$item")
+        echo "$size_bytes|d|$basename_item"
+      elif [ -f "$item" ]; then
+        # File: get file size directly
+        size_bytes=$(du -sb "$item" 2>/dev/null | awk '{print $1}' || echo "0")
+        basename_item=$(basename "$item")
+        echo "$size_bytes|f|$basename_item"
+      fi
     fi
   done | sort -t'|' -k1 -nr > "$temp_file"
 
@@ -153,15 +161,22 @@ show_recursive_tree() {
   line_count=$(wc -l < "$temp_file")
   local current_line=1
 
-  while IFS='|' read -r size_bytes dir_name; do
+  while IFS='|' read -r size_bytes item_type item_name; do
     if [ "$current_line" -eq "$line_count" ]; then
       tree_char="└──"
     else
       tree_char="├──"
     fi
 
+    # Add different icons for files vs directories
+    if [ "$item_type" = "d" ]; then
+      icon="📁"
+    else
+      icon="📄"
+    fi
+
     size_human=$(human_readable "$size_bytes")
-    printf "%s %-30s %s\n" "$tree_char" "$dir_name" "$size_human"
+    printf "%s %s %-28s %s\n" "$tree_char" "$icon" "$item_name" "$size_human"
 
     ((current_line++))
   done < "$temp_file"
@@ -169,7 +184,7 @@ show_recursive_tree() {
   rm -f "$temp_file"
 
   if [ "$line_count" -eq 0 ]; then
-    echo "└── (no subdirectories found)"
+    echo "└── (no files or directories found)"
   fi
   echo
 }

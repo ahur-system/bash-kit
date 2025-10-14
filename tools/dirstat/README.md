@@ -6,7 +6,7 @@ Analyzes directory and filesystem usage with optional recursive tree view.
 
 - ✅ **Filesystem Analysis** - Shows total, used, and available space
 - ✅ **Usage Breakdown** - Displays how much filesystem space a directory uses
-- ✅ **Recursive Tree View** - Visual tree of subdirectories sorted by size
+- ✅ **Recursive Tree View** - Visual tree of files and directories sorted by size
 - ✅ **Human-Readable Sizes** - Automatic B/K/M/G/T formatting
 - ✅ **Path Validation** - Graceful error handling for invalid paths
 - ✅ **Space-Safe** - Handles directory names with spaces
@@ -34,7 +34,7 @@ dirstat /var/log
 
 ### Recursive Tree View
 ```bash
-# Show subdirectories tree sorted by size
+# Show files and directories tree sorted by size
 dirstat -r /var/log
 
 # Recursive analysis of current directory
@@ -102,11 +102,11 @@ Path usage:  2.8G of 45G used (6.2%)
 🌳 Directory Tree
 ════════════════════════════════════════════════════════════════
 📂 /var/log
-├── apache2                    1.2G
-├── mysql                      890M
-├── nginx                      456M
-├── kern.log                   234M
-└── auth.log                   78M
+├── 📁 apache2                  1.2G
+├── 📁 mysql                    890M
+├── 📁 nginx                    456M
+├── 📄 kern.log                 234M
+└── 📄 auth.log                 78M
 ```
 
 ### Error Handling
@@ -137,7 +137,7 @@ Error: Path '/root' is not readable
 
 ## Examples
 
-**Find largest directories in /var:**
+**Find largest files and directories in /var:**
 ```bash
 dirstat -r /var
 ```
@@ -160,7 +160,7 @@ dirstat /
 
 ## Notes
 
-- Recursive mode shows only direct subdirectories (1 level deep by default)
+- Recursive mode shows both files and directories (1 level deep by default)
 - Sizes are calculated using `du -sb` for accuracy
 - Tree view is sorted by size (largest first)
 - Inaccessible directories are silently skipped in recursive mode
