@@ -70,9 +70,9 @@ Fetches multiple free proxy lists periodically, tests them, and maintains a `hea
 - **Automatic systemd service** - installs and starts on installation
 
 **Files created:**
-- `~/proxy_watcher/all.txt` → latest fetched raw proxy list
-- `~/proxy_watcher/healthy.txt` → always-up-to-date working proxies  
-- `~/proxy_watcher/bad.txt` → log of failed proxies (with timestamp)
+- `/tmp/proxy_watcher/all.txt` → latest fetched raw proxy list
+- `/tmp/proxy_watcher/healthy.txt` → always-up-to-date working proxies  
+- `/tmp/proxy_watcher/bad.txt` → log of failed proxies (with timestamp)
 
 **Usage:**
 ```bash

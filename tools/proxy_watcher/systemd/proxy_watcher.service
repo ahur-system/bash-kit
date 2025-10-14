@@ -10,7 +10,7 @@ Type=simple
 Restart=always
 RestartSec=10
 User=nobody
-Group=nogroup
+Group=nobody
 ExecStart=/usr/local/bin/proxy_watcher
 StandardOutput=journal
 StandardError=journal
@@ -21,7 +21,8 @@ NoNewPrivileges=true
 PrivateTmp=true
 ProtectSystem=strict
 ProtectHome=true
-ReadWritePaths=/home/nobody/proxy_watcher
+ReadWritePaths=/tmp/proxy_watcher
+WorkingDirectory=/tmp/proxy_watcher
 
 # Resource limits
 MemoryMax=256M

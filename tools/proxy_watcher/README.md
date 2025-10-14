@@ -64,7 +64,7 @@ Edit the script to modify these settings:
 
 ## Files Created
 
-All files are created in `~/proxy_watcher/`:
+All files are created in `/tmp/proxy_watcher/`:
 
 - **`healthy.txt`** - Always up-to-date working proxies (one per line)
 - **`bad.txt`** - Failed proxies with timestamps

@@ -47,23 +47,27 @@ install_tool() {
   # Install additional files (systemd, README, etc.)
   local files_installed=0
 
-  # Try to install systemd service
+  # Try to install systemd service (optional)
   if curl -fsSL "$TOOLS_URL/$tool/systemd/$tool.service" -o "$tool_dir/$tool.service" 2>/dev/null; then
     echo "  ✓ systemd service downloaded: $tool_dir/$tool.service"
 
     # Install and enable systemd service
-    cp "$tool_dir/$tool.service" "/etc/systemd/system/$service_name.service"
-    systemctl daemon-reload
-    systemctl enable "$service_name.service"
-    systemctl start --no-block "$service_name.service"
+    if cp "$tool_dir/$tool.service" "/etc/systemd/system/$service_name.service" 2>/dev/null && \
+       systemctl daemon-reload 2>/dev/null && \
+       systemctl enable "$service_name.service" >/dev/null 2>&1 && \
+       systemctl start --no-block "$service_name.service" >/dev/null 2>&1; then
 
-    # Wait a moment and check if service started properly
-    sleep 2
-    if systemctl is-active --quiet "$service_name.service"; then
-      echo "  ✓ systemd service installed and started: $service_name.service"
+      # Wait a moment and check if service started properly
+      sleep 2
+      if systemctl is-active --quiet "$service_name.service" 2>/dev/null; then
+        echo "  ✓ systemd service installed and started: $service_name.service"
+      else
+        echo "  ✓ systemd service installed (may need manual start)"
+        echo "    Start with: sudo systemctl start $service_name"
+      fi
     else
-      echo "  ! systemd service installed but may have issues starting: $service_name.service"
-      echo "    Check with: sudo systemctl status $service_name"
+      echo "  ! systemd service downloaded but failed to install"
+      echo "    Install manually: sudo cp $tool_dir/$tool.service /etc/systemd/system/"
     fi
     files_installed=1
   fi
@@ -88,10 +92,10 @@ uninstall_tool() {
   # Remove systemd service if it exists
   if [ -f "/etc/systemd/system/$service_name.service" ]; then
     echo "  [-] Stopping and removing systemd service..."
-    systemctl stop "$service_name.service" 2>/dev/null || true
-    systemctl disable "$service_name.service" 2>/dev/null || true
+    systemctl stop "$service_name.service" >/dev/null 2>&1 || true
+    systemctl disable "$service_name.service" >/dev/null 2>&1 || true
     rm -f "/etc/systemd/system/$service_name.service"
-    systemctl daemon-reload
+    systemctl daemon-reload >/dev/null 2>&1 || true
     echo "  ✓ systemd service removed: $service_name.service"
   fi
 
