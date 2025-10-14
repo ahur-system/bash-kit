@@ -2,50 +2,40 @@
 
 This directory contains the systemd service file to run `proxy_watcher` as a system service.
 
-## Installation
+## Automatic Installation
 
-1. **Install the proxy_watcher tool:**
-   ```bash
-   sudo bash -c "$(curl -sL https://github.com/alikhaleghi/bash-kit/raw/master/scripts.sh)" @ install proxy_watcher
-   ```
-   This automatically downloads the tool and systemd service file.
+The systemd service is **automatically installed, enabled, and started** when you install the tool:
 
-2. **Install the systemd service:**
-   ```bash
-   sudo cp /usr/local/bash-kit/tools/proxy_watcher/proxy-watcher.service /etc/systemd/system/
-   sudo systemctl daemon-reload
-   ```
+```bash
+sudo bash -c "$(curl -sL https://github.com/alikhaleghi/bash-kit/raw/master/scripts.sh)" @ install proxy_watcher
+```
 
-3. **Enable and start the service:**
-   ```bash
-   sudo systemctl enable --now proxy-watcher
-   ```
+That's it! The service will be running immediately after installation.
 
 ## Management Commands
 
 ```bash
 # Check status
-sudo systemctl status proxy-watcher
+sudo systemctl status proxy_watcher
 
 # View logs
-sudo journalctl -u proxy-watcher -f
+sudo journalctl -u proxy_watcher -f
 
 # Stop service
-sudo systemctl stop proxy-watcher
+sudo systemctl stop proxy_watcher
 
 # Restart service
-sudo systemctl restart proxy-watcher
+sudo systemctl restart proxy_watcher
 
 # Disable service (won't start on boot)
-sudo systemctl disable proxy-watcher
+sudo systemctl disable proxy_watcher
+```
 
-# Remove service completely
-sudo systemctl stop proxy-watcher
-sudo systemctl disable proxy-watcher
-sudo rm /etc/systemd/system/proxy-watcher.service
-sudo systemctl daemon-reload
+## Uninstallation
 
-# Uninstall the tool entirely
+Complete removal (stops service, disables it, removes all files):
+
+```bash
 sudo bash -c "$(curl -sL https://github.com/alikhaleghi/bash-kit/raw/master/scripts.sh)" @ uninstall proxy_watcher
 ```
 

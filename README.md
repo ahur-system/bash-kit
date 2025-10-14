@@ -30,14 +30,14 @@ sudo bash -c "$(curl -sL https://github.com/alikhaleghi/bash-kit/raw/master/scri
 # List all available tools
 sudo bash -c "$(curl -sL https://github.com/alikhaleghi/bash-kit/raw/master/scripts.sh)" @ list
 
-# Install multiple tools at once
+# Install multiple tools at once (each auto-starts systemd service if available)
 sudo bash -c "$(curl -sL https://github.com/alikhaleghi/bash-kit/raw/master/scripts.sh)" @ install proxy_watcher backup_mysql
 
-# Uninstall a tool
+# Uninstall a tool (stops/removes systemd service automatically)
 sudo bash -c "$(curl -sL https://github.com/alikhaleghi/bash-kit/raw/master/scripts.sh)" @ uninstall proxy_watcher
 
-# Run an installed tool
-proxy_watcher
+# Check running service
+sudo systemctl status proxy_watcher
 ```
 
 ## 📁 Directory Structure
@@ -67,14 +67,22 @@ Fetches multiple free proxy lists periodically, tests them, and maintains a `hea
 - Randomizes testing order
 - Pulls from multiple public proxy lists
 - All timeouts and intervals configurable
+- **Automatic systemd service** - installs and starts on installation
 
 **Files created:**
 - `~/proxy_watcher/all.txt` → latest fetched raw proxy list
 - `~/proxy_watcher/healthy.txt` → always-up-to-date working proxies  
 - `~/proxy_watcher/bad.txt` → log of failed proxies (with timestamp)
 
-**Background usage:**
+**Usage:**
 ```bash
+# Install and auto-start as systemd service
+sudo bash -c "$(curl -sL https://github.com/alikhaleghi/bash-kit/raw/master/scripts.sh)" @ install proxy_watcher
+
+# Check service status
+sudo systemctl status proxy_watcher
+
+# Manual run (if needed)
 nohup proxy_watcher >/tmp/proxy_watcher.log 2>&1 &
 ```
 

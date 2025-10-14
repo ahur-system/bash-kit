@@ -14,7 +14,7 @@ Group=nogroup
 ExecStart=/usr/local/bin/proxy_watcher
 StandardOutput=journal
 StandardError=journal
-SyslogIdentifier=proxy-watcher
+SyslogIdentifier=proxy_watcher
 
 # Security settings
 NoNewPrivileges=true
