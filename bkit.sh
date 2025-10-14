@@ -29,29 +29,39 @@ EOF
 
 list_tools() {
   echo "[*] Fetching available tools from GitHub..."
+  echo "[DEBUG] API URL: $TOOLS_API_URL"
 
-  # Add timeout and better error handling
+  echo "[DEBUG] Starting curl request..."
   local response
-  if ! response=$(curl -sL --max-time 10 --fail "$TOOLS_API_URL" 2>/dev/null); then
-    echo "✗ Failed to fetch tools from GitHub API"
-    echo "  Trying simple fallback..."
-    echo "proxy_watcher"
+  response=$(curl -sL --max-time 3 "$TOOLS_API_URL" 2>&1)
+  local curl_exit=$?
+
+  echo "[DEBUG] Curl exit code: $curl_exit"
+  echo "[DEBUG] Response length: ${#response}"
+
+  if [ $curl_exit -ne 0 ]; then
+    echo "✗ GitHub API request failed (exit code: $curl_exit)"
+    echo "✗ Curl output: $response"
+    echo ""
+    echo "Available tools (hardcoded):"
+    echo "  proxy_watcher"
     return
   fi
 
-  # Extract tool names
-  local tools
-  if ! tools=$(echo "$response" | grep '"name":' | cut -d'"' -f4 | sort); then
-    echo "✗ Failed to parse GitHub response"
-    echo "  Available tools: proxy_watcher"
-    return
-  fi
+  echo "[DEBUG] Parsing response..."
+  local tools=$(echo "$response" | grep '"name":' | cut -d'"' -f4 | head -10)
 
   if [ -z "$tools" ]; then
-    echo "✗ No tools found in response"
-    echo "  Available tools: proxy_watcher"
+    echo "✗ No tools found in API response"
+    echo "[DEBUG] First 200 chars of response: ${response:0:200}"
+    echo ""
+    echo "Available tools (hardcoded):"
+    echo "  proxy_watcher"
   else
-    echo "$tools"
+    echo "[DEBUG] Found tools: $tools"
+    echo ""
+    echo "Available tools:"
+    echo "$tools" | sed 's/^/  /'
   fi
 }
 
