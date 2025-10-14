@@ -9,9 +9,8 @@ StartLimitIntervalSec=0
 Type=simple
 Restart=always
 RestartSec=10
-User=nobody
-Group=nobody
-ExecStartPre=/bin/bash -c 'mkdir -p /var/lib/proxy_watcher && chown nobody:nobody /var/lib/proxy_watcher'
+
+ExecStartPre=/bin/mkdir -p /var/lib/proxy_watcher
 ExecStart=/usr/local/bin/proxy_watcher
 Environment=HOME=/var/lib/proxy_watcher
 WorkingDirectory=/var/lib/proxy_watcher

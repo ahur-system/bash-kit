@@ -41,7 +41,7 @@ curl -sL https://github.com/ahur-system/bash-kit/raw/main/scripts.sh | sudo bash
 
 ## Service Details
 
-- **User:** `nobody` (runs with minimal privileges)
+- **User:** `root` (required for network access and directory creation)
 - **Working Directory:** `/var/lib/proxy_watcher/`
 - **Log Output:** systemd journal (use `journalctl`)
 - **Auto-restart:** Yes (if crashes)
