@@ -29,8 +29,30 @@ EOF
 
 list_tools() {
   echo "[*] Fetching available tools from GitHub..."
-  curl -sL "$TOOLS_API_URL" \
-    | grep '"name":' | cut -d'"' -f4 | sort
+
+  # Add timeout and better error handling
+  local response
+  if ! response=$(curl -sL --max-time 10 --fail "$TOOLS_API_URL" 2>/dev/null); then
+    echo "✗ Failed to fetch tools from GitHub API"
+    echo "  Trying simple fallback..."
+    echo "proxy_watcher"
+    return
+  fi
+
+  # Extract tool names
+  local tools
+  if ! tools=$(echo "$response" | grep '"name":' | cut -d'"' -f4 | sort); then
+    echo "✗ Failed to parse GitHub response"
+    echo "  Available tools: proxy_watcher"
+    return
+  fi
+
+  if [ -z "$tools" ]; then
+    echo "✗ No tools found in response"
+    echo "  Available tools: proxy_watcher"
+  else
+    echo "$tools"
+  fi
 }
 
 install_tool() {
