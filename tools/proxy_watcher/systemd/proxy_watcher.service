@@ -20,7 +20,6 @@ SyslogIdentifier=proxy_watcher
 
 # Security settings
 NoNewPrivileges=true
-ReadWritePaths=/var/lib/proxy_watcher
 
 # Resource limits
 MemoryMax=256M
