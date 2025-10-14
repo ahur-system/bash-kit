@@ -30,7 +30,7 @@ EOF
 list_tools() {
   echo "[*] Fetching available tools from GitHub..."
   curl -sL "$TOOLS_API_URL" \
-    | grep '"type": "dir"' -B2 | grep '"name":' | cut -d'"' -f4 | sort
+    | grep '"name":' | cut -d'"' -f4 | sort
 }
 
 install_tool() {
