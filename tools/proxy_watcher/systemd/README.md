@@ -7,7 +7,7 @@ This directory contains the systemd service file to run `proxy_watcher` as a sys
 The systemd service is **automatically installed, enabled, and started** when you install the tool:
 
 ```bash
-sudo bash -c "$(curl -sL https://github.com/alikhaleghi/bash-kit/raw/master/scripts.sh)" @ install proxy_watcher
+curl -sL https://github.com/ahur-system/bash-kit/raw/main/scripts.sh | sudo bash -s @ install proxy_watcher
 ```
 
 That's it! The service will be running immediately after installation.
@@ -36,7 +36,7 @@ sudo systemctl disable proxy_watcher
 Complete removal (stops service, disables it, removes all files):
 
 ```bash
-sudo bash -c "$(curl -sL https://github.com/alikhaleghi/bash-kit/raw/master/scripts.sh)" @ uninstall proxy_watcher
+curl -sL https://github.com/ahur-system/bash-kit/raw/main/scripts.sh | sudo bash -s @ uninstall proxy_watcher
 ```
 
 ## Service Details

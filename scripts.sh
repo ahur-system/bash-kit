@@ -12,9 +12,9 @@ usage() {
 bash-kit installer
 
 Usage:
-  $(basename "$0") @ install [tool1] [tool2] ...
-  $(basename "$0") @ list
-  $(basename "$0") @ uninstall [tool]
+  curl -sL $REPO/raw/main/scripts.sh | sudo bash -s @ install [tool1] [tool2] ...
+  curl -sL $REPO/raw/main/scripts.sh | sudo bash -s @ list
+  curl -sL $REPO/raw/main/scripts.sh | sudo bash -s @ uninstall [tool]
 EOF
 }
 
@@ -105,7 +105,7 @@ case "${1:-}" in
           list_tools
           echo ""
           echo "Install one with:"
-          echo "  sudo bash -c \"\$(curl -sL $REPO/raw/main/scripts.sh)\" @ install <tool>"
+          echo "  curl -sL $REPO/raw/main/scripts.sh | sudo bash -s @ install <tool>"
         else
           mkdir -p "$INSTALL_DIR/tools"
           for tool in "$@"; do install_tool "$tool"; done
