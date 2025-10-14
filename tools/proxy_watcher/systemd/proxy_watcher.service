@@ -11,18 +11,17 @@ Restart=always
 RestartSec=10
 User=nobody
 Group=nobody
+ExecStartPre=/bin/bash -c 'mkdir -p /var/lib/proxy_watcher && chown nobody:nobody /var/lib/proxy_watcher'
 ExecStart=/usr/local/bin/proxy_watcher
+Environment=HOME=/var/lib/proxy_watcher
+WorkingDirectory=/var/lib/proxy_watcher
 StandardOutput=journal
 StandardError=journal
 SyslogIdentifier=proxy_watcher
 
 # Security settings
 NoNewPrivileges=true
-PrivateTmp=true
-ProtectSystem=strict
-ProtectHome=true
-ReadWritePaths=/tmp/proxy_watcher
-WorkingDirectory=/tmp/proxy_watcher
+ReadWritePaths=/var/lib/proxy_watcher
 
 # Resource limits
 MemoryMax=256M
