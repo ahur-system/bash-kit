@@ -64,8 +64,7 @@ Edit the script to modify these settings:
 
 ## Files Created
 
-**Manual run:** Files created in `~/proxy_watcher/`  
-**systemd service:** Files created in `/var/lib/proxy_watcher/`
+**All runs:** Files created in `/usr/local/bash-kit/tools/proxy_watcher/data/`
 
 - **`healthy.txt`** - Always up-to-date working proxies (one per line)
 - **`bad.txt`** - Failed proxies with timestamps

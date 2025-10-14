@@ -42,7 +42,7 @@ curl -sL https://github.com/ahur-system/bash-kit/raw/main/bkit.sh | sudo bash -s
 ## Service Details
 
 - **User:** `root` (required for network access and directory creation)
-- **Working Directory:** `/var/lib/proxy_watcher/`
+- **Working Directory:** `/usr/local/bash-kit/tools/proxy_watcher/data/`
 - **Log Output:** systemd journal (use `journalctl`)
 - **Auto-restart:** Yes (if crashes)
 - **Memory limit:** 256MB
@@ -50,7 +50,7 @@ curl -sL https://github.com/ahur-system/bash-kit/raw/main/bkit.sh | sudo bash -s
 
 ## Files Location
 
-The service will create files in `/var/lib/proxy_watcher/`:
+The service will create files in `/usr/local/bash-kit/tools/proxy_watcher/data/`:
 - `healthy.txt` - Working proxies
 - `bad.txt` - Failed proxies log
 - `all.txt` - Raw proxy lists

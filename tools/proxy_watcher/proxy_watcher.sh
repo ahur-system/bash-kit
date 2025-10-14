@@ -8,7 +8,7 @@
 set -euo pipefail
 
 # --- CONFIG ---
-WORKDIR="${HOME}/proxy_watcher"
+WORKDIR="/usr/local/bash-kit/tools/proxy_watcher/data"
 FETCH_INTERVAL_MIN=30          # minutes between fetching new proxies
 CHECK_INTERVAL_SEC=60          # seconds between random health checks
 MAX_CONCURRENT_CHECKS=10       # concurrent curl checks

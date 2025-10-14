@@ -7,7 +7,7 @@ Wants=network.target
 Type=simple
 Restart=always
 RestartSec=10
-Environment=HOME=/root
+Environment=HOME=/usr/local/bash-kit/tools/proxy_watcher/data
 ExecStart=/usr/local/bin/proxy_watcher
 StandardOutput=journal
 StandardError=journal
