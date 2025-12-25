@@ -20,10 +20,10 @@ curl -sL https://github.com/ahur-system/bash-kit/raw/main/bkit.sh | sudo bash -s
 
 ## 🔧 Available Tools
 
-| Tool | Description |
-|------|-------------|
-| **proxy_watcher** | Continuously fetches and maintains a list of working free proxies |
-| **dirstat** | Analyzes directory and filesystem usage with optional recursive tree view |
+| Tool | Description | Version |
+|------|-------------|---------|
+| **proxy_watcher** | Continuously fetches and maintains a list of working free proxies | v0.1.0 |
+| **dirstat** | Analyzes directory and filesystem usage with optional recursive tree view | - |
 
 ## 🧩 Usage Examples
 
@@ -65,39 +65,64 @@ bash-kit/
 
 ## 🛠️ Tool Details
 
-### proxy_watcher
+### proxy_watcher v0.1.0
 
-Fetches multiple free proxy lists periodically, tests them, and maintains a `healthy.txt` file with working proxies.
+Continuously fetches and maintains a list of working free proxies with enhanced management capabilities.
 
 **Features:**
-- Keeps working proxies in `healthy.txt`
-- Logs dead ones to `bad.txt` (with timestamps)  
-- Runs forever in a loop (perfect for systemd service)
-- Randomizes testing order
-- Pulls from multiple public proxy lists
-- All timeouts and intervals configurable
-- **Automatic systemd service** - installs and starts on installation
+- Multi-source proxy fetching from 4+ public lists
+- Real-time health monitoring with configurable timeouts
+- Smart caching with `healthy.txt` and timestamped `bad.txt`
+- Randomized testing to avoid detection patterns
+- Concurrent checks for faster validation
+- **NEW:** Proxy setting/unsetting for session or system-wide use
+- **NEW:** Enhanced IP validation (IPv4/IPv6, octet range checking)
+- **NEW:** File locking to prevent race conditions
+- **NEW:** Safe .bashrc modification with backup creation
+- **NEW:** Dependency checking and signal handling
+- **NEW:** User-writable data directory (no root required)
+- **NEW:** Comprehensive logging with timestamps
+- **NEW:** GNOME proxy support for desktop browsers (Firefox, Chrome)
+- **NEW:** Smart desktop environment detection with server compatibility
+- **NEW:** Status command for proxy configuration and connectivity
+- **NEW:** Version command and proper versioning
 
 **Files created:**
-- **All runs:** `/usr/local/bash-kit/tools/proxy_watcher/data/` directory with proxy files
-- `healthy.txt` → always-up-to-date working proxies  
-- `bad.txt` → log of failed proxies (with timestamp)
-- `all.txt` → latest fetched raw proxy list
+- **Data:** `$HOME/.local/share/bash-kit/proxy_watcher/` directory
+  - `healthy.txt` → always-up-to-date working proxies  
+  - `bad.txt` → failed proxies with timestamps
+  - `all.txt` → latest fetched raw proxy list
+  - `*.lock` → file locks for concurrent access
+- **Backup:** `$HOME/.bashrc.proxy_watcher.backup` (when using --system)
 
 **Usage:**
 ```bash
 # Install and auto-start as systemd service
 curl -sL https://github.com/ahur-system/bash-kit/raw/main/bkit.sh | sudo bash -s @ install proxy_watcher
 
-# Or install bkit locally first:
-sudo bash -c "$(curl -sL https://github.com/ahur-system/bash-kit/raw/main/bkit.sh)" @ install bkit
-bkit install proxy_watcher
+# Basic proxy operations
+proxy_watcher healthy    # List working proxies
+proxy_watcher bad        # List failed proxies
+proxy_watcher all        # List all discovered proxies
+
+# Set/unset proxies (works with shell + GNOME system proxy)
+eval "$(proxy_watcher set)"           # Set for current session
+proxy_watcher set --system          # Set system-wide
+proxy_watcher unset                  # Remove from session (immediate)
+proxy_watcher unset --system         # Remove system-wide
+
+# Status and version
+proxy_watcher status     # Show proxy configuration and connectivity
+proxy_watcher version    # Show version info
+proxy_watcher help       # Show usage
+
+# Manual IP checking (use reliable services)
+curl https://api.ipify.org        # ✅ Reliable (script default)
+curl https://icanhazip.com       # ✅ Reliable
+# curl https://ipinfo.io/ip       # ❌ Unreliable (don't use)
 
 # Check service status
 sudo systemctl status proxy_watcher
-
-# Manual run (if needed)
-nohup proxy_watcher >/tmp/proxy_watcher.log 2>&1 &
 ```
 
 ### dirstat
